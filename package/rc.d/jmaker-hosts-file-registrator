@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+
+# PROVIDE: jmaker_hosts_file_registrator
+# REQUIRE: NETWORKING
+
+. /etc/rc.subr
+
+export PATH="$PATH:/usr/local/bin"
+_programm="jmaker-hosts-file-registrator"
+_procname="/usr/local/bin/${_programm}"
+
+name="jmaker_hosts_file_registrator"
+rcvar=${name}_enable
+
+load_rc_config $name
+
+pidfile="/var/run/${_programm}"
+procname="/usr/local/bin/node"
+command="/usr/sbin/daemon"
+
+: ${jmaker_hosts_file_registrator_enable="NO"}
+: ${jmaker_hosts_file_registrator_output="/etc/hosts"}
+
+command_args="-f -t ${_programm} -p ${pidfile} ${_procname} \
+    --file=${jmaker_hosts_file_registrator_output}"
+
+run_rc_command "$1"
